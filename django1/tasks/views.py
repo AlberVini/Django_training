@@ -6,7 +6,7 @@ from .models import Task
 
 def taskList(request):
     tasks = Task.objects.all()
-    return render(request, 'tasks/list.html', {'task':tasks})
+    return render(request, 'tasks/list.html', {'tasks':tasks})
 
 def taskView(request, id):
     task = get_object_or_404(Task, pk=id)
