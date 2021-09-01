@@ -1,12 +1,19 @@
 from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.core.paginator import Paginator
 from django.http import HttpResponse
 from .models import Task
 from .forms import Task, TaskForm
 from django.contrib import messages
 
 def taskList(request):
-    tasks = Task.objects.all().order_by('-created_at')
+    task_list = Task.objects.all().order_by('-created_at')
+
+    paginator = Paginator(task_list, 3)
+    page = request.GET.get('page')
+
+    tasks = paginator.get_page(page)
+
     return render(request, 'tasks/list.html', {'tasks':tasks})
 
 def taskView(request, id):
