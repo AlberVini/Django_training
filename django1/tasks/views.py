@@ -7,12 +7,18 @@ from .forms import Task, TaskForm
 from django.contrib import messages
 
 def taskList(request):
-    task_list = Task.objects.all().order_by('-created_at')
 
-    paginator = Paginator(task_list, 3)
-    page = request.GET.get('page')
+    search = request.GET.get('search')
 
-    tasks = paginator.get_page(page)
+    if search:
+        tasks = Task.objects.filter(title__icontains=search)
+    else:
+        task_list = Task.objects.all().order_by('-created_at')
+
+        paginator = Paginator(task_list, 3)
+        page = request.GET.get('page')
+
+        tasks = paginator.get_page(page)
 
     return render(request, 'tasks/list.html', {'tasks':tasks})
 
